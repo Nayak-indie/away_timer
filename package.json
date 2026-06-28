@@ -56,7 +56,7 @@
     },
     "publish": {
       "provider": "github",
-      "owner": "Nayak-indie",
+      "owner": "mxw6767-coder",
       "repo": "away-timer"
     }
   }
