@@ -45,8 +45,15 @@ export function useTimer(onTick?: (state: TimerState) => void): UseTimerReturn {
     intervalRef.current = setInterval(() => {
       const current = timerRef.current
 
-      if (current.status === 'running') {
-        if (current.remainingTime <= 1) {
+      if (current.status === 'running' || current.status === 'away') {
+        const isAway = current.status === 'away'
+        
+        if (isAway && current.awayStartTime) {
+          const elapsed = Math.floor((Date.now() - current.awayStartTime) / 1000)
+          setAwayElapsed(elapsed)
+        }
+
+        if (current.remainingTime <= 1 && !isAway) {
           clearTick()
           setTimer((prev) => ({
             ...prev,
@@ -63,13 +70,10 @@ export function useTimer(onTick?: (state: TimerState) => void): UseTimerReturn {
         } else {
           setTimer((prev) => ({
             ...prev,
-            remainingTime: prev.remainingTime - 1,
+            remainingTime: Math.max(0, prev.remainingTime - 1),
             lastUpdated: Date.now(),
           }))
         }
-      } else if (current.status === 'away' && current.awayStartTime) {
-        const elapsed = Math.floor((Date.now() - current.awayStartTime) / 1000)
-        setAwayElapsed(elapsed)
       }
     }, 1000)
   }, [clearTick, onTick])
@@ -163,14 +167,16 @@ export function useTimer(onTick?: (state: TimerState) => void): UseTimerReturn {
 
       let restored = { ...state, lastUpdated: now }
 
-      if (state.status === 'running' && elapsedSinceUpdate > 0) {
+      if ((state.status === 'running' || state.status === 'away') && elapsedSinceUpdate > 0) {
         const newRemaining = Math.max(0, state.remainingTime - elapsedSinceUpdate)
         restored = {
           ...restored,
           remainingTime: newRemaining,
-          status: newRemaining <= 0 ? 'completed' : 'running',
+          status: (newRemaining <= 0 && state.status === 'running') ? 'completed' : state.status,
         }
-      } else if (state.status === 'away' && state.awayStartTime) {
+      } 
+      
+      if (state.status === 'away' && state.awayStartTime) {
         const awaySeconds = Math.floor((now - state.awayStartTime) / 1000)
         setAwayElapsed(awaySeconds)
       }

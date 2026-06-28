@@ -1,6 +1,6 @@
 {
   "name": "away-timer",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A minimal dark-themed desktop timer with away-time tracking for productivity",
   "main": "dist-electron/main.js",
   "author": "Away Timer",
@@ -52,6 +52,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
+      "license": "build/license.txt",
       "shortcutName": "Away Timer"
     },
     "publish": {

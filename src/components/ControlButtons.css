@@ -83,3 +83,13 @@
   color: var(--text-secondary);
   background: var(--bg-elevated);
 }
+
+@media (max-width: 260px), (max-height: 380px) {
+  .control-buttons__secondary {
+    display: none;
+  }
+  .control-buttons {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}

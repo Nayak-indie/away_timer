@@ -1,0 +1,13 @@
+# Changelog
+
+## [1.0.2] - "Focus Refund Update"
+
+### Added
+- **Continuous Timer Logic**: Away mode no longer pauses the timer. Instead, it tracks the duration you were gone and refunds the time upon your return.
+- **Compact Mode**: Shrink the window down to 140x140 to activate a hyper-compact UI perfect for keeping beside PDFs and documents.
+- **Focus Refund Animation**: Added a visual floating +Time cue when away time is compensated.
+- **Funny EULA**: Added a lighthearted "Focus Refund" license agreement to the Windows installer.
+
+### Changed
+- Re-architected away time math to ensure offline logic supports continuous countdowns.
+- Reduced minimum window constraints from 280x420 to 140x140.

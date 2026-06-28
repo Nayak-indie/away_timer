@@ -101,3 +101,9 @@
   font-size: 0.7rem;
   color: var(--accent-red);
 }
+
+@media (max-width: 260px), (max-height: 380px) {
+  .duration-input {
+    display: none;
+  }
+}

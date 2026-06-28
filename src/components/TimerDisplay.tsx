@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { formatTime } from '@/utils/time'
 import type { TimerState } from '@/types/timer'
 import './TimerDisplay.css'
@@ -9,13 +10,37 @@ interface TimerDisplayProps {
 
 export function TimerDisplay({ timer, awayElapsed }: TimerDisplayProps) {
   const isAway = timer.status === 'away'
-  const displayTime = isAway ? timer.remainingTime : timer.remainingTime
+  const displayTime = timer.remainingTime
+
+  const [refundAnimation, setRefundAnimation] = useState<{ amount: number, id: number } | null>(null)
+  const [prevStatus, setPrevStatus] = useState(timer.status)
+  const [lastAwayElapsed, setLastAwayElapsed] = useState(0)
+
+  useEffect(() => {
+    if (isAway && awayElapsed > 0) {
+      setLastAwayElapsed(awayElapsed)
+    }
+  }, [isAway, awayElapsed])
+
+  useEffect(() => {
+    if (prevStatus === 'away' && timer.status === 'running' && lastAwayElapsed > 0) {
+      setRefundAnimation({ amount: lastAwayElapsed, id: Date.now() })
+      setTimeout(() => setRefundAnimation(null), 3000)
+    }
+    setPrevStatus(timer.status)
+  }, [timer.status, prevStatus, lastAwayElapsed])
 
   return (
     <div className={`timer-display ${timer.status}`}>
       <div className="timer-display__main">
         <span className="timer-display__time">{formatTime(displayTime)}</span>
         <span className="timer-display__label">remaining</span>
+        
+        {refundAnimation && (
+          <span key={refundAnimation.id} className="timer-display__refund">
+            +{formatTime(refundAnimation.amount)}
+          </span>
+        )}
       </div>
 
       {isAway && (

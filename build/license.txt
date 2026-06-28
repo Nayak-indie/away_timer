@@ -1,0 +1,27 @@
+================================================================================
+                        AWAY TIMER "FOCUS REFUND" EULA
+================================================================================
+
+By clicking "I Agree" or continuing to install this software, you hereby agree
+to the following terms and conditions:
+
+1. THE "NO EXCUSES" CLAUSE: You acknowledge that procrastination is a 
+   productivity crime. You agree to at least *try* to stay focused while the
+   timer is running.
+
+2. THE "NATURE CALLS" CLAUSE: You are permitted to use the "Away Mode" for 
+   essential bodily functions, refilling your coffee, or answering the door for
+   pizza delivery. 
+
+3. THE INDIE DEV TRIBUTE: You agree to mentally project positive vibes to 
+   the developer, Nayak-Indie, every time you successfully complete a 1-hour 
+   focus session. (Sacrifices to the coding deities are optional but appreciated.)
+
+4. THE FOCUS REFUND PROMISE: We promise to refund your lost focus time when 
+   you return from your breaks, maintaining the illusion that you never stopped
+   working in the first place.
+
+If you do not agree with any of these humorous but completely non-binding 
+terms, you may still install the software. But we'll know. We'll always know.
+
+(Just kidding. Please click "I Agree" to continue setup!)
