@@ -1,34 +1,45 @@
 import { app, BrowserWindow, ipcMain, screen } from 'electron'
 import path from 'path'
 import fs from 'fs'
+import crypto from 'crypto'
 import { autoUpdater } from 'electron-updater'
 import log from 'electron-log'
+import { PostHog } from 'posthog-node'
+
+const posthog = new PostHog('phc_xzSvDAjBbqD8K9kfiuoQjZXWy3iTJAZxQ8tEmWxasadD', {
+  host: 'https://us.i.posthog.com'
+})
 
 const isDev = !app.isPackaged
 const DATA_FILE = path.join(app.getPath('userData'), 'away-timer-state.json')
 
 let mainWindow: BrowserWindow | null = null
+let appDeviceId = ''
 
 interface PersistedState {
   timer: unknown
   alwaysOnTop: boolean
   windowBounds?: { x: number; y: number; width: number; height: number }
+  deviceId?: string
 }
 
 function loadState(): PersistedState | null {
   try {
     if (fs.existsSync(DATA_FILE)) {
-      return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'))
+      const data = JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'))
+      appDeviceId = data.deviceId || crypto.randomUUID()
+      return data
     }
   } catch {
     // ignore corrupt state
   }
+  appDeviceId = crypto.randomUUID()
   return null
 }
 
 function saveState(state: PersistedState): void {
   try {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(state, null, 2), 'utf-8')
+    fs.writeFileSync(DATA_FILE, JSON.stringify({ ...state, deviceId: appDeviceId }, null, 2), 'utf-8')
   } catch {
     // ignore write errors
   }
@@ -91,6 +102,12 @@ function createWindow(): void {
 app.whenReady().then(() => {
   createWindow()
   
+  posthog.capture({
+    distinctId: appDeviceId,
+    event: 'App_Launched',
+    properties: { version: app.getVersion() }
+  })
+  
   if (!isDev) {
     // Initial check after a short delay
     setTimeout(() => {
@@ -104,8 +121,9 @@ app.whenReady().then(() => {
   }
 })
 
-app.on('window-all-closed', () => {
+app.on('window-all-closed', async () => {
   if (process.platform !== 'darwin') {
+    await posthog.shutdown()
     app.quit()
   }
 })
@@ -153,4 +171,15 @@ autoUpdater.on('update-downloaded', (info) => sendUpdaterEvent('downloaded', inf
 
 ipcMain.on('install-update', () => {
   autoUpdater.quitAndInstall(false, true)
+})
+
+ipcMain.on('track-event', (event, eventName, properties) => {
+  posthog.capture({
+    distinctId: appDeviceId,
+    event: eventName,
+    properties: {
+      ...properties,
+      version: app.getVersion()
+    }
+  })
 })

@@ -13,5 +13,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('updater-event', handler)
     return () => ipcRenderer.off('updater-event', handler)
   },
-  installUpdate: () => ipcRenderer.send('install-update')
+  installUpdate: () => ipcRenderer.send('install-update'),
+  trackEvent: (eventName: string, properties?: any) => ipcRenderer.send('track-event', eventName, properties)
 })

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.2] - "Telemetry & Insights Update"
+
+### Added
+- **Anonymous Analytics**: Integrated PostHog to track anonymous usage patterns (App launches, Timer starts, Away mode usage).
+- **Device UUIDs**: Generates a unique, anonymous device ID on first launch for aggregate behavior analysis without collecting personal data.
+
 ## [1.1.0] - "Auto-Update Foundation"
 
 ### Added

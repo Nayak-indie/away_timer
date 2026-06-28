@@ -55,6 +55,7 @@ export function useTimer(onTick?: (state: TimerState) => void): UseTimerReturn {
 
         if (current.remainingTime <= 1 && !isAway) {
           clearTick()
+          window.electronAPI?.trackEvent?.('Timer_Completed', { original_duration: current.originalDuration })
           setTimer((prev) => ({
             ...prev,
             remainingTime: 0,
@@ -100,11 +101,15 @@ export function useTimer(onTick?: (state: TimerState) => void): UseTimerReturn {
   const start = useCallback(() => {
     updateTimer((prev) => {
       if (prev.status === 'completed' || prev.remainingTime <= 0) {
+        window.electronAPI?.trackEvent?.('Timer_Started', { duration: prev.originalDuration })
         return {
           ...createInitialTimerState(prev.originalDuration),
           status: 'running',
           lastUpdated: Date.now(),
         }
+      }
+      if (prev.status !== 'running') {
+        window.electronAPI?.trackEvent?.('Timer_Started', { duration: prev.remainingTime })
       }
       return { ...prev, status: 'running' as TimerStatus, lastUpdated: Date.now() }
     })
@@ -129,6 +134,7 @@ export function useTimer(onTick?: (state: TimerState) => void): UseTimerReturn {
   const enterAway = useCallback(() => {
     updateTimer((prev) => {
       if (prev.status !== 'running' && prev.status !== 'paused') return prev
+      window.electronAPI?.trackEvent?.('AwayMode_Entered', { remaining_time: prev.remainingTime })
       return {
         ...prev,
         status: 'away' as TimerStatus,
@@ -144,6 +150,7 @@ export function useTimer(onTick?: (state: TimerState) => void): UseTimerReturn {
       if (prev.status !== 'away' || !prev.awayStartTime) return prev
 
       const awaySeconds = Math.floor((Date.now() - prev.awayStartTime) / 1000)
+      window.electronAPI?.trackEvent?.('AwayMode_Exited', { duration_away: awaySeconds })
 
       return {
         ...prev,
