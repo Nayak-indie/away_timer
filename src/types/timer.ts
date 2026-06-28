@@ -30,6 +30,7 @@ export interface ElectronAPI {
   onUpdaterEvent: (callback: (event: string, data?: any) => void) => () => void
   installUpdate: () => void
   trackEvent: (eventName: string, properties?: any) => void
+  getVersion?: () => Promise<string>
 }
 
 declare global {

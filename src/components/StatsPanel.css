@@ -45,6 +45,15 @@
   background: currentColor;
 }
 
+.stats-panel__version {
+  position: absolute;
+  bottom: -16px;
+  right: 0;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
 .status--running {
   color: var(--accent-green);
 }

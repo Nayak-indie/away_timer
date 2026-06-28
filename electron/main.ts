@@ -135,6 +135,7 @@ app.on('activate', () => {
 })
 
 ipcMain.handle('get-state', () => loadState())
+ipcMain.handle('get-version', () => app.getVersion())
 
 ipcMain.handle('save-state', (_event, state: PersistedState) => {
   const current = loadState()
