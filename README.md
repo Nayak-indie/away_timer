@@ -14,6 +14,10 @@ A minimal, dark-themed desktop timer for productivity and interruption tracking.
 - **Persistent state** — Timer progress survives app restarts
 - **Compact design** — ~320px wide floating window with a modern dark UI
 
+## Download
+
+Get the latest Windows installer from [Releases](https://github.com/mxw6767-coder/away-timer/releases).
+
 ## Quick Start
 
 ### Prerequisites
