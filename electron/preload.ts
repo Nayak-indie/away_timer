@@ -8,4 +8,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getAlwaysOnTop: (): Promise<boolean> => ipcRenderer.invoke('get-always-on-top'),
   minimize: (): void => ipcRenderer.send('window-minimize'),
   close: (): void => ipcRenderer.send('window-close'),
+  onUpdaterEvent: (callback: (event: string, data?: any) => void) => {
+    const handler = (_e: any, event: string, data?: any) => callback(event, data)
+    ipcRenderer.on('updater-event', handler)
+    return () => ipcRenderer.off('updater-event', handler)
+  },
+  installUpdate: () => ipcRenderer.send('install-update')
 })

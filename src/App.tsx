@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { UpdaterBanner } from '@/components/UpdaterBanner'
 import { TitleBar } from '@/components/TitleBar'
 import { TimerDisplay } from '@/components/TimerDisplay'
 import { DurationInput } from '@/components/DurationInput'
@@ -64,6 +65,7 @@ export default function App() {
     <div className="app">
       <TitleBar alwaysOnTop={alwaysOnTop} onToggleAlwaysOnTop={handleToggleAlwaysOnTop} />
       <main className="app__content">
+        <UpdaterBanner />
         <TimerDisplay timer={timer} awayElapsed={awayElapsed} />
         <DurationInput
           originalDuration={timer.originalDuration}

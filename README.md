@@ -16,7 +16,10 @@ A minimal, dark-themed desktop timer for productivity and interruption tracking.
 
 ## Download
 
-Get the latest Windows installer from [Releases](https://github.com/mxw6767-coder/away-timer/releases).
+**🎉 v1.1.0 marks the final manual download you will ever need to make.**
+
+Get the Windows installer (`v1.1.0`) from [Releases](https://github.com/mxw6767-coder/away-timer/releases). 
+*Note: Make sure you install `v1.1.0` or higher to receive automatic, silent background updates for all future versions.*
 
 ## Quick Start
 

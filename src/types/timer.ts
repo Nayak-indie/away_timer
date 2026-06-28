@@ -27,6 +27,8 @@ export interface ElectronAPI {
   getAlwaysOnTop: () => Promise<boolean>
   minimize: () => void
   close: () => void
+  onUpdaterEvent: (callback: (event: string, data?: any) => void) => () => void
+  installUpdate: () => void
 }
 
 declare global {

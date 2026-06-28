@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0] - "Auto-Update Foundation"
+
+### Added
+- **Auto-Updater Engine**: Added robust background update checking via `electron-updater` and `electron-log`. Checks automatically run on startup and every 6 hours.
+- **Dark-Themed Updater UI**: Added a slick in-app banner for update progress, and a dynamic compact mode badge.
+- **The Last Manual Download**: From this version forward, you will never need to manually download or run an installer again!
+
 ## [1.0.2] - "Focus Refund Update"
 
 ### Added

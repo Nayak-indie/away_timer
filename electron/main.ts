@@ -1,6 +1,8 @@
 import { app, BrowserWindow, ipcMain, screen } from 'electron'
 import path from 'path'
 import fs from 'fs'
+import { autoUpdater } from 'electron-updater'
+import log from 'electron-log'
 
 const isDev = !app.isPackaged
 const DATA_FILE = path.join(app.getPath('userData'), 'away-timer-state.json')
@@ -86,7 +88,21 @@ function createWindow(): void {
   })
 }
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow()
+  
+  if (!isDev) {
+    // Initial check after a short delay
+    setTimeout(() => {
+      autoUpdater.checkForUpdatesAndNotify()
+    }, 3000)
+
+    // Periodic check every 6 hours
+    setInterval(() => {
+      autoUpdater.checkForUpdatesAndNotify()
+    }, 6 * 60 * 60 * 1000)
+  }
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -118,3 +134,23 @@ ipcMain.handle('get-always-on-top', () => mainWindow?.isAlwaysOnTop() ?? false)
 
 ipcMain.on('window-minimize', () => mainWindow?.minimize())
 ipcMain.on('window-close', () => mainWindow?.close())
+
+// Setup updater logging
+log.transports.file.level = 'info'
+autoUpdater.logger = log
+
+// Auto-Updater events
+const sendUpdaterEvent = (event: string, data?: any) => {
+  mainWindow?.webContents.send('updater-event', event, data)
+}
+
+autoUpdater.on('checking-for-update', () => sendUpdaterEvent('checking'))
+autoUpdater.on('update-available', (info) => sendUpdaterEvent('available', info))
+autoUpdater.on('update-not-available', (info) => sendUpdaterEvent('not-available', info))
+autoUpdater.on('error', (err) => sendUpdaterEvent('error', err?.message || 'Update error'))
+autoUpdater.on('download-progress', (progressObj) => sendUpdaterEvent('progress', progressObj))
+autoUpdater.on('update-downloaded', (info) => sendUpdaterEvent('downloaded', info))
+
+ipcMain.on('install-update', () => {
+  autoUpdater.quitAndInstall(false, true)
+})
